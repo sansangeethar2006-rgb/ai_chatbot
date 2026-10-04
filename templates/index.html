@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Website</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+
+<body class="website-page">
+
+    <nav class="navbar">
+        <div class="nav-logo">✦ Sangeetha</div>
+
+        <div class="nav-links">
+    <a href="/">Home</a>
+    <a href="/about">About</a>
+    <a href="/chatbot">Chatbot</a>
+</div>
+    </nav>
+
+<main class="home-content">
+
+    <section class="hero-section">
+
+        <div class="hero-text">
+            <p class="hero-greeting">Hello, I'm Sangeetha 👋</p>
+
+            <h1>
+    BCA Student
+    <br>
+    <span>Exploring AI & Web Development</span>
+</h1>
+
+            <p class="hero-description">
+                I'm a BCA student who enjoys learning technology,
+                building projects, and exploring how AI can be used
+                to create useful and interactive experiences.
+            </p>
+
+            <div class="hero-buttons">
+                <a href="/chatbot" class="primary-btn">
+                    Try My Chatbot →
+                </a>
+
+                <a href="/about" class="secondary-btn">
+                    About Me
+                </a>
+            </div>
+        </div>
+
+        <div class="hero-visual">
+            <div class="hero-card">
+                <div class="hero-icon">✦</div>
+                <h2>AI Assistant</h2>
+                <p>Ask. Explore. Learn.</p>
+            </div>
+        </div>
+
+    </section>
+
+</main>
+<script>
+    const savedTheme = localStorage.getItem("theme");
+
+    if (savedTheme === "light") {
+        document.body.classList.add("light-theme");
+    }
+</script>
+</body>
+</html>
+

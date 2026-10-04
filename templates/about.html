@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Me</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="website-page">
+
+    <nav class="navbar">
+        <div class="nav-logo">✦ Sangeetha</div>
+
+        <div class="nav-links">
+    <a href="/">Home</a>
+    <a href="/about">About</a>
+    <a href="/chatbot">Chatbot</a>
+
+</div>
+    </nav>
+
+    <main class="about-content">
+
+    <section class="about-section">
+
+        <div class="about-heading">
+            <p class="section-label">ABOUT ME</p>
+            <h1>A little about me ✨</h1>
+        </div>
+
+        <div class="about-text">
+            <p>
+                I'm a BCA student who enjoys learning about technology
+                and exploring different areas of computer science.
+            </p>
+
+            <p>
+                I'm particularly interested in AI, web development,
+                and creating simple projects that help me learn by doing.
+            </p>
+
+            <p>
+                One of my recent projects is an AI chatbot, where I worked
+                on the interface, features, backend integration, and
+                prompt-based interactions.
+            </p>
+        </div>
+
+    </section>
+
+    <section class="project-highlight">
+
+        <div class="project-icon">✦</div>
+
+        <div>
+            <p class="section-label">MY PROJECT</p>
+            <h2>AI Chatbot</h2>
+            <p>
+                An interactive chatbot project created while exploring
+                AI and web development.
+            </p>
+        </div>
+
+        <a href="/chatbot" class="primary-btn">
+            Try Chatbot →
+        </a>
+
+    </section>
+
+</main>
+<script>
+    const savedTheme = localStorage.getItem("theme");
+
+    if (savedTheme === "light") {
+        document.body.classList.add("light-theme");
+    }
+</script>
+
+</body>
+</html>
