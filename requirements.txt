@@ -4,3 +4,4 @@ google-genai==2.20.0
 gradio-client==2.6.1
 Pillow==12.2.0
 gunicorn
+requests
