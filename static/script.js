@@ -959,6 +959,19 @@ regenerateButton.addEventListener(
 // COPY
 // --------------------------------------------------
 
+const copyButton =
+    document.createElement('button');
+
+copyButton.classList.add(
+    'response-menu-item'
+);
+
+copyButton.innerHTML =
+    '<span>📋</span><span>Copy</span>';
+
+copyButton.title =
+    'Copy response';
+
 copyButton.addEventListener(
     'click',
     async function (event) {
@@ -967,9 +980,14 @@ copyButton.addEventListener(
 
         try {
 
-            if (navigator.clipboard && window.isSecureContext) {
+            if (
+                navigator.clipboard &&
+                window.isSecureContext
+            ) {
 
-                await navigator.clipboard.writeText(aiReply);
+                await navigator.clipboard.writeText(
+                    aiReply
+                );
 
             } else {
 
@@ -982,7 +1000,9 @@ copyButton.addEventListener(
                 textArea.style.left = '-9999px';
                 textArea.style.top = '0';
 
-                document.body.appendChild(textArea);
+                document.body.appendChild(
+                    textArea
+                );
 
                 textArea.focus();
                 textArea.select();
