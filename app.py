@@ -731,6 +731,25 @@ def analyze_image_request(user_message, conversation_history=None):
 
     conversation_history = conversation_history or []
 
+    # Fast path for ordinary image prompts.
+    # Avoid an extra Gemini request for simple subjects (for example,
+    # cats, flowers, landscapes and objects). This helps prevent the
+    # image request from timing out before it reaches the image service.
+    reference_terms = (
+        "actor", "actress", "celebrity", "public figure",
+        "famous person", "real person", "movie character",
+        "film character", "tv character", "television character",
+        "specific character", "landmark", "brand logo",
+    )
+    message_lower = user_message.lower()
+    if not any(term in message_lower for term in reference_terms):
+        print("Using direct image prompt; skipping Gemini image analysis.")
+        return {
+            "image_prompt": user_message,
+            "needs_reference": False,
+            "reference_query": ""
+        }
+
     context_parts = []
     for message in conversation_history[-6:]:
         role = message.get("role", "")
