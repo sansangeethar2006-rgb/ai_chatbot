@@ -1304,20 +1304,12 @@ try {
 }
 
 catch (error) {
+    if (error.name === 'AbortError') return;
 
-    if (
-        error.name === 'AbortError'
-    ) {
-        return;
-    }
-
-    console.error(
-        'Image generation error:',
-        error
-    );
+    console.error('Image generation error:', error);
 
     addMessage(
-        'Sorry, I could not generate the image. Please try again.',
+        `Image generation failed: ${error.message || 'Unknown error. Check Render logs.'}`,
         'bot'
     );
 }
