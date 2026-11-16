@@ -341,62 +341,63 @@ def is_time_request(message):
 
 def detect_image_generation_intent(message, conversation_history):
     """
-    Use Gemini AI to intelligently detect if the user's message
-    requires image generation based on natural language understanding.
+    Detect explicit image-generation requests locally.
+
+    This deliberately avoids calling Gemini just to classify every chat
+    message. Ordinary text questions can proceed directly to the text
+    response handler, avoiding an unnecessary network request and timeout.
     """
 
-    try:
+    message_lower = (message or "").lower().strip()
 
-        # Build context from recent conversation
-        context = ""
+    # Image-generation actions users commonly type.
+    creation_terms = (
+        "generate", "create", "draw", "design", "illustrate",
+        "paint", "render", "visualize", "sketch", "make me",
+        "make a", "make an", "show me a", "show me an"
+    )
 
-        for msg in conversation_history[-3:]:
+    # Requests that clearly ask for visual output.
+    visual_terms = (
+        "image", "picture", "photo", "drawing", "illustration",
+        "artwork", "diagram", "poster", "logo", "wallpaper",
+        "icon", "sketch", "portrait", "graphic", "visual"
+    )
 
-            role = msg.get("role")
-            content = msg.get("content")
+    # Text/code tasks should not be sent to the image generator.
+    text_only_terms = (
+        "code", "python program", "html", "css", "javascript",
+        "essay", "paragraph", "story", "email", "report",
+        "summary", "list", "table", "formula", "definition"
+    )
 
-            if role == "user":
-                context += f"\nUser: {content}"
-            elif role == "assistant":
-                context += f"\nAssistant: {content}"
-
-
-        # Create a focused detection prompt
-        detection_prompt = f"""
-Analyze whether the user's message is requesting image or visual content generation.
-
-Recent conversation context:
-{context}
-
-Current user message: "{message}"
-
-Respond with ONLY one word:
-- "YES" if the user is asking for image/visual/picture/diagram/illustration/artwork generation
-- "NO" if the user is asking for text-based information only
-
-Consider natural language variations and context.
-Do not be overly strict - if there's a reasonable interpretation that the user wants visual content, respond YES.
-"""
-
-        response = gemini_client.models.generate_content(
-            model="gemini-3.6-flash",
-            contents=detection_prompt
-        )
-
-        result = response.text.strip().upper()
-
-        return result == "YES"
-
-    except Exception as e:
-
-        print(
-            "Image detection error:",
-            repr(e)
-        )
-
-        # If detection fails, return False (safer default)
+    if any(term in message_lower for term in text_only_terms):
         return False
-    
+
+    has_creation_action = any(
+        term in message_lower for term in creation_terms
+    )
+    has_visual_term = any(
+        term in message_lower for term in visual_terms
+    )
+
+    # Examples: "create an image of a cat", "draw a cat",
+    # "generate a diagram", "show me a picture of a sunset".
+    if has_creation_action and (
+        has_visual_term
+        or message_lower.startswith(("draw ", "paint ", "sketch ", "illustrate "))
+    ):
+        return True
+
+    # Handle natural requests such as "draw a cat" or "paint a sunset",
+    # where the word image/picture is not explicitly included.
+    if message_lower.startswith((
+        "draw ", "please draw ", "paint ", "please paint ",
+        "sketch ", "please sketch ", "illustrate ", "please illustrate "
+    )):
+        return True
+
+    return False
 
 
 # ==================================================
